@@ -1,9 +1,51 @@
-import Image from "next/image";
+import { getTodos, toggleTodo, deleteTodo } from "./todos/actions";
+import { TodoForm } from "./todos/components/todo-form";
+import { Button } from "@/components/ui/button";
 
-export default function Home() {
+export default async function TodosPage() {
+  const todos = await getTodos();
+
   return (
-    <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      Hi, My name is Shubh Singh. This is my fist commit after setup of pnpm and next js
+    <div className="max-w-xl mx-auto mt-10 space-y-4">
+      <h1 className="text-2xl font-bold">Todos</h1>
+
+      <TodoForm />
+
+      {todos?.map((todo) => (
+        <div
+          key={todo.id}
+          className="flex justify-between p-3 border rounded-lg"
+        >
+          <span
+            className={todo.completed ? "line-through" : ""}
+          >
+            {todo.title}
+          </span>
+
+          <div className="flex gap-2">
+            
+            <form
+              action={async () => {
+                "use server";
+                await toggleTodo(todo.id, todo.completed);
+              }}
+>
+              <Button type="submit">Toggle</Button>
+            </form>
+
+            <form
+              action={async () => {
+                "use server";
+                await deleteTodo(todo.id);
+              }}
+            >
+              <Button variant="destructive" type="submit">
+                Delete
+              </Button>
+            </form>
+          </div>
+        </div>
+      ))}
     </div>
   );
 }
