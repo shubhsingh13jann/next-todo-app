@@ -1,3 +1,5 @@
+export const dynamic = "force-dynamic";
+
 import { getTodos, toggleTodo, deleteTodo } from "./todos/actions";
 import { TodoForm } from "./todos/components/todo-form";
 import { Button } from "@/components/ui/button";
